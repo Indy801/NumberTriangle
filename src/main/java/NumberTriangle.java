@@ -88,31 +88,34 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
 
         // iterative implementation
-        NumberTriangle cur = this;
-        for (int i = 0; i < path.length(); i++) {
-            char direction = path.charAt(i);
-            if (direction == 'r') {
-                cur = cur.right;
-            }
-            else {
-                cur = cur.left;
-            }
-        }
-
-        return cur.root;
+//        NumberTriangle cur = this;
+//        for (int i = 0; i < path.length(); i++) {
+//            char direction = path.charAt(i);
+//            if (direction == 'r') {
+//                cur = cur.right;
+//            }
+//            else {
+//                cur = cur.left;
+//            }
+//        }
+//
+//        return cur.root;
 
         // recursive implementation
-//        String nextPath = path.substring(1);
-//        char curPath = path.charAt(0);
-//        if (curPath == 'r') {
-//            return this.right.retrieve(nextPath);
-//        }
-//        else {
-//            return this.left.retrieve(nextPath);
-//        }
+        if (isLeaf() || path.isEmpty()) {
+            return root;
+        }
+
+        String nextPath = path.substring(1);
+        char curPath = path.charAt(0);
+        if (curPath == 'r') {
+            return this.right.retrieve(nextPath);
+        }
+        else {
+            return this.left.retrieve(nextPath);
+        }
 
 
     }
@@ -135,8 +138,6 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         NumberTriangle[] previousLine =  new NumberTriangle[0];
         NumberTriangle[] currentLine;
 
@@ -153,18 +154,21 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
             String[] splittedNumberStrings = line.split(" ");
 
             for (int i = 0; i < splittedNumberStrings.length; i++) {
                 NumberTriangle nt = new NumberTriangle(Integer.parseInt(splittedNumberStrings[i]));
                 currentLine[i] = nt;
                 if (i - 1 >= 0) {
-                    previousLine[i - 1].right = nt;
+                    previousLine[i - 1].setRight(nt);
                 }
-                if (i + 1 < previousLine.length) {
-                    previousLine[i + 1].left = nt;
+                if (i < previousLine.length) {
+                    previousLine[i].setLeft(nt);
                 }
+            }
+
+            if (lineCount == 1) {
+                top = currentLine[0];
             }
 
             previousLine = currentLine;
