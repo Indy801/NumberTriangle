@@ -112,17 +112,37 @@ public class NumberTriangle {
 
         // TODO define any variables that you want to use to store things
 
+        NumberTriangle[] previousLine =  new NumberTriangle[0];
+        NumberTriangle[] currentLine;
+
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+        int lineCount = 0;
         while (line != null) {
+            lineCount++;
+            currentLine = new NumberTriangle[lineCount];
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
             // TODO process the line
+            String[] splittedNumberStrings = line.split(" ");
+
+            for (int i = 0; i < splittedNumberStrings.length; i++) {
+                NumberTriangle nt = new NumberTriangle(Integer.parseInt(splittedNumberStrings[i]));
+                currentLine[i] = nt;
+                if (i - 1 >= 0) {
+                    previousLine[i - 1].right = nt;
+                }
+                if (i + 1 < previousLine.length) {
+                    previousLine[i + 1].left = nt;
+                }
+            }
+
+            previousLine = currentLine;
 
             //read the next line
             line = br.readLine();
